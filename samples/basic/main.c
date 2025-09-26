@@ -1,4 +1,5 @@
-#include "log.h"
+#include <stdio.h>
+#include <log.h>
 
 int main(void)
 {
@@ -14,6 +15,6 @@ int main(void)
     log_fatal("A fatal event occured");
 
     fclose(logfile);
-    
+
     return 0;
 }

@@ -1,4 +1,5 @@
-#include "log.h"
+#include <stdio.h>
+#include <log.h>
 
 void trace_clbk(log_Event* evt)
 {

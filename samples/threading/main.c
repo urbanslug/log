@@ -1,7 +1,9 @@
-#include "log.h"
 #include <pthread.h>
 #include <signal.h>
 #include <unistd.h>
+#include <stdio.h>
+
+#include <log.h>
 
 static bool s_stop = false;
 pthread_mutex_t MUTEX_LOG;
@@ -12,11 +14,11 @@ void log_lock(bool lock, void* mutex) {
 
     if (lock)
     {
-        pthread_mutex_lock(LOCK);
+	pthread_mutex_lock(LOCK);
     }
     else
     {
-        pthread_mutex_unlock(LOCK);
+	pthread_mutex_unlock(LOCK);
     }
 }
 
@@ -30,10 +32,10 @@ void* run(void *arg) {
 
     // Forever
     for (;;) {
-        // Log the thread's id and the iteration index
-    	log_debug("thread id: %d idx:%u", id, idx++);
+	// Log the thread's id and the iteration index
+	log_debug("thread id: %d idx:%u", id, idx++);
 
-        // Sleep 100ms
+	// Sleep 100ms
 	    usleep(1000 * 100);
 
 	    if (s_stop) { break; }
@@ -62,7 +64,7 @@ int main() {
 
     // Redirect signals to stop() fucntion
     signal(SIGINT, stop);
-    signal(SIGKILL, stop); 
+    signal(SIGKILL, stop);
     signal(SIGTERM, stop);
 
     pthread_t thread_handles[8];
@@ -70,14 +72,14 @@ int main() {
 
     // Create 8 threads, each passing their id as parameter
     for (int i= 0; i<8; i++) {
-        pthread_create(&thread_handles[i], NULL, run, &id_array[i]);
+	pthread_create(&thread_handles[i], NULL, run, &id_array[i]);
     }
 
     void* thread_retvals[8] = {NULL};
 
     // Start threads
     for (int i=0; i<8; i++) {
-        pthread_join(thread_handles[i], &thread_retvals[i]);
+	pthread_join(thread_handles[i], &thread_retvals[i]);
     }
 
     pthread_mutex_destroy(&MUTEX_LOG);
